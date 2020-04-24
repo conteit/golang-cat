@@ -19,7 +19,7 @@ func readFileContent() []byte {
 
 	content, err := ioutil.ReadFile(name)
 	if err != nil {
-		os.Exit(2)
+		os.Exit(3)
 	}
 	return content
 }
@@ -29,17 +29,17 @@ func getFileName() string {
 	flag.Parse()
 
 	if *name == "" {
-		autoDetermineFileToPrintOut()
+		name = autoDetermineFileToPrintOut()
 	}
 	return *name
 }
 
-func autoDetermineFileToPrintOut() string {
+func autoDetermineFileToPrintOut() *string {
 	name := os.Args[0]
 	if index := strings.LastIndex(name, filepath.Ext(name)); index >= 0 {
 		name = name[0:index] + ".txt"
 	} else {
 		os.Exit(1)
 	}
-	return name
+	return &name
 }
