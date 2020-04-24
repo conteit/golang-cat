@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -10,6 +11,7 @@ import (
 
 func main() {
 	fmt.Println(string(readFileContent()))
+	os.Exit(0)
 }
 
 func readFileContent() []byte {
@@ -23,16 +25,17 @@ func readFileContent() []byte {
 }
 
 func getFileName() string {
-	args := os.Args
-	name := autoDetermineFileToPrintOut(args)
-	if len(args) > 1 {
-		name = args[1]
+	name := flag.String("f", "", "provide the name of the file to print out")
+	flag.Parse()
+
+	if *name == "" {
+		autoDetermineFileToPrintOut()
 	}
-	return name
+	return *name
 }
 
-func autoDetermineFileToPrintOut(args []string) string {
-	name := args[0]
+func autoDetermineFileToPrintOut() string {
+	name := os.Args[0]
 	if index := strings.LastIndex(name, filepath.Ext(name)); index >= 0 {
 		name = name[0:index] + ".txt"
 	} else {
